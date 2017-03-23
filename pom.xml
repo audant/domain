@@ -9,20 +9,55 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Domain bobb Project</name>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<mule.tools.version>1.2</mule.tools.version>
+		<wagon.version>1.0</wagon.version>
+		<wagon.ssh.version>2.8</wagon.ssh.version>
+		<deployment.server>mule.bobb.cz</deployment.server>
+		<deployment.path>/opt/mule/domains</deployment.path>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-domain-maven-plugin</artifactId>
-				<version>1.2</version>
+				<version>${mule.tools.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<!-- if MULE_HOME variable is configured then the domain will be copy 
-						to domains directory of your mule installation -->
 					<copyToDomainsDirectory>true</copyToDomainsDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>${wagon.version}</version>
+				<configuration>
+					<serverId>mule-bobb</serverId>
+					<url>scp://${deployment.server}</url>
+					<fromFile>${project.build.directory}/${project.artifactId}-${project.version}.zip</fromFile>
+					<toFile>${deployment.path}/${project.groupId}.zip</toFile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>upload-domain</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>upload-single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>${wagon.ssh.version}</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<pluginRepositories>

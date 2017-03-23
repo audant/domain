@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<domain:mule-domain
-        xmlns="http://www.mulesoft.org/schema/mule/core"
-        xmlns:domain="http://www.mulesoft.org/schema/mule/domain"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:spring="http://www.springframework.org/schema/beans"
-        xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-        xsi:schemaLocation="
-               http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-               http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-               http://www.mulesoft.org/schema/mule/domain http://www.mulesoft.org/schema/mule/domain/current/mule-domain.xsd">
+<domain:mule-domain xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:domain="http://www.mulesoft.org/schema/mule/domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/domain http://www.mulesoft.org/schema/mule/domain/current/mule-domain.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 
-    <!-- configure here resource to be shared within the domain -->
+	<http:listener-config name="HTTP_Listener_80"
+		host="0.0.0.0" port="80" doc:name="HTTP Listener Configuration" />
+
+	<http:listener-config name="HTTPS_Listener_443"
+		protocol="HTTPS" host="0.0.0.0" port="443" doc:name="HTTP Listener Configuration">
+		<tls:context>
+			<tls:key-store type="jks" path="mule.bobb.cz.20180312.jks"
+				alias="mule.bobb.cz" password="pa55W0rd" keyPassword="KeyPa55W0rd" />
+		</tls:context>
+	</http:listener-config>
 
 </domain:mule-domain>
