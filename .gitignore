@@ -43,3 +43,8 @@ local.properties
 flows/
 target/
 **/*.mflow
+
+# App specific
+*.jks
+domain-dev.properties
+domain-prod.properties
